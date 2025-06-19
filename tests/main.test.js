@@ -1,4 +1,4 @@
-import crosswordSolver from "./crosswordSolver.js";
+import crosswordSolver from "../src/core/main.js";
 
 function runTests() {
   console.log("=== running crossword solver tests ===\n");

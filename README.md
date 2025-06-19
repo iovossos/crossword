@@ -10,7 +10,7 @@ A JavaScript implementation of a crossword puzzle solver that takes an empty cro
 ## Description
 
 This crossword solver uses a backtracking algorithm to place words in a crossword puzzle grid. It validates inputs, checks for unique solutions, and handles various edge cases including multiple solutions, no solutions, and invalid inputs. The test file contains all the audit tests.
-This project is part of the zone01 curriculum
+This project is part of the zone01 curriculum.
 
 ## Features
 
@@ -20,6 +20,8 @@ This project is part of the zone01 curriculum
 - Handles crossword grids with starting positions marked by numbers (1 or 2)
 - Ensures all words fit properly with valid intersections
 - Provides detailed error messages for various failure cases
+- Optimized word matching by length for better performance
+- Pre-filtering to avoid checking incompatible word/slot combinations
 
 ## Installation
 
@@ -36,7 +38,7 @@ cd crossword
 ### Basic Usage
 
 ```javascript
-const crosswordSolver = require('./crosswordSolver.js');
+import crosswordSolver from './src/core/main.js';
 
 // Define your puzzle grid
 const puzzle = "2001\n0..0\n1000\n0..0";
@@ -76,7 +78,7 @@ This represents a 4x4 grid where:
 Run the test suite:
 
 ```bash
-node crosswordSolver.test.js
+node tests/main.test.js
 ```
 
 ## Algorithm
@@ -85,18 +87,64 @@ The solver uses a depth-first search with backtracking:
 
 1. **Validation**: Checks input format and consistency
 2. **Parsing**: Converts the puzzle string into a working grid
-3. **Starting Points**: Identifies all numbered cells and their slot lengths
-4. **Word Placement**: 
+3. **Word Preprocessing**: Groups words by length for efficient lookup
+4. **Length Validation**: Ensures words exist for all required slot lengths
+5. **Starting Points**: Identifies all numbered cells and their slot lengths
+6. **Word Placement**: 
    - For cells marked `2`: Finds pairs of words with the same starting letter
    - For cells marked `1`: Finds single words that fit the slot
-5. **Backtracking**: If a placement doesn't lead to a solution, it backtracks and tries alternatives
-6. **Solution Verification**: Ensures exactly one unique solution exists
+7. **Constraint Propagation**: Prioritizes forced placements and most constrained positions
+8. **Backtracking**: If a placement doesn't lead to a solution, it backtracks and tries alternatives
+9. **Solution Verification**: Ensures exactly one unique solution exists
 
 ## File Structure
 
 ```
 crossword/
-├── crosswordSolver.js      # Main solver implementation
-├── crosswordSolver.test.js # Test suite
-└── README.md              # This file
+├── src/
+│   ├── core/
+│   │   ├── main.js          # main entry point and orchestration
+│   │   └── solver.js        # backtracking algorithm and solution finding
+│   ├── validation/
+│   │   └── validation.js    # input validation and format checking
+│   ├── grid/
+│   │   ├── gridUtils.js     # grid parsing and slot length calculations
+│   │   └── placement.js     # word placement and conflict detection
+│   ├── words/
+│   │   └── wordUtils.js     # word processing, grouping, and matching
+│   └── output/
+│       └── output.js        # result formatting and display
+├── tests/
+│   └── main.test.js         # audit test cases
+└── README.md                # this file
 ```
+
+### Module Descriptions
+
+**src/core/** - main logic and solving engine
+- `main.js` - coordinates the entire solving process
+- `solver.js` - implements the recursive backtracking algorithm
+
+**src/validation/** - input validation
+- `validation.js` - validates puzzle format, word list, and constraints
+
+**src/grid/** - grid operations and word placement
+- `gridUtils.js` - parses puzzle strings and calculates slot dimensions
+- `placement.js` - handles placing words on grid with conflict checking
+
+**src/words/** - word processing and matching
+- `wordUtils.js` - groups words by length, finds matches, validates compatibility
+
+**src/output/** - result formatting
+- `output.js` - formats and displays the solved puzzle
+
+**tests/** - test suite
+- `main.test.js` - contains all audit tests and edge cases
+
+## Performance Optimizations
+
+- **Pre-filtering by length**: only considers words that match slot lengths
+- **Early validation**: checks if required word lengths exist before solving
+- **Constraint propagation**: handles forced placements first
+- **Optimized word lookup**: groups words by length for O(1) access
+- **Smart backtracking**: most constrained positions are tried first
