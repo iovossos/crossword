@@ -95,7 +95,7 @@ function validateInputs(emptyPuzzle, words) {
 
   // check if puzzle contains only valid characters (0-9, .)
   for (let line of lines) {
-    if (!/^[0-9.]+$/.test(line)) {
+    if (!/^[0-2.]+$/.test(line)) {
       return {
         isValid: false,
         error: "puzzle must contain only digits (0-9) and dots (.)",
