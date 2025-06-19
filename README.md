@@ -10,7 +10,7 @@ A JavaScript implementation of a crossword puzzle solver that takes an empty cro
 ## Description
 
 This crossword solver uses a backtracking algorithm to place words in a crossword puzzle grid. It validates inputs, checks for unique solutions, and handles various edge cases including multiple solutions, no solutions, and invalid inputs. The test file contains all the audit tests.
-This project is part of the zone01 curriculum.
+This project is part of the zone01 curriculum
 
 ## Features
 
@@ -75,10 +75,26 @@ This represents a 4x4 grid where:
 
 ## Running Tests
 
-Run the test suite:
+Run the full audit test suite:
 
 ```bash
 node tests/main.test.js
+```
+
+Run all unit tests:
+
+```bash
+node tests/runAllTests.js
+```
+
+Run specific unit test modules:
+
+```bash
+node tests/validation.test.js    # test input validation
+node tests/gridUtils.test.js     # test grid parsing functions
+node tests/wordUtils.test.js     # test word processing functions
+node tests/placement.test.js     # test word placement logic
+node tests/output.test.js        # test output formatting
 ```
 
 ## Algorithm
@@ -115,7 +131,13 @@ crossword/
 │   └── output/
 │       └── output.js        # result formatting and display
 ├── tests/
-│   └── main.test.js         # audit test cases
+│   ├── main.test.js         # audit test cases
+│   ├── validation.test.js   # unit tests for input validation
+│   ├── gridUtils.test.js    # unit tests for grid parsing and calculations
+│   ├── wordUtils.test.js    # unit tests for word processing functions
+│   ├── placement.test.js    # unit tests for word placement logic
+│   ├── output.test.js       # unit tests for output formatting
+│   └── runAllTests.js       # test runner for all unit tests
 └── README.md                # this file
 ```
 
@@ -140,6 +162,12 @@ crossword/
 
 **tests/** - test suite
 - `main.test.js` - contains all audit tests and edge cases
+- `validation.test.js` - unit tests for input validation functions
+- `gridUtils.test.js` - unit tests for grid parsing and slot calculations
+- `wordUtils.test.js` - unit tests for word processing and matching
+- `placement.test.js` - unit tests for word placement and conflict detection
+- `output.test.js` - unit tests for output formatting functions
+- `runAllTests.js` - convenient runner for all unit tests
 
 ## Performance Optimizations
 
@@ -148,3 +176,23 @@ crossword/
 - **Constraint propagation**: handles forced placements first
 - **Optimized word lookup**: groups words by length for O(1) access
 - **Smart backtracking**: most constrained positions are tried first
+
+## Future Improvements
+
+### Performance Enhancements
+- **Arc consistency**: Implement forward checking to eliminate impossible word combinations earlier
+- **Parallel processing**: Use web workers to explore different branches simultaneously
+- **Memoization**: Cache partial solutions to avoid recalculating similar states
+- **Better heuristics**: Implement minimum remaining values (MRV) and degree heuristics for variable ordering
+
+### Code Quality
+- **Error handling**: More granular error messages with specific failure reasons
+- **Logging system**: Configurable logging levels for debugging complex puzzles
+- **Performance metrics**: Built-in timing and step counting for optimization analysis
+- **Configuration options**: Customizable solver parameters (max steps, timeout, etc.)
+
+### Features
+- **Interactive mode**: Step-by-step solution visualization
+- **Puzzle generation**: Create crossword puzzles given just a word list
+- **Format support**: Support for standard crossword puzzle formats (.puz, .ipuz)
+- **Difficulty analysis**: Automatic puzzle difficulty rating based on solving complexity
